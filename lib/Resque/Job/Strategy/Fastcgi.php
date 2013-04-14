@@ -5,8 +5,8 @@ namespace Resque\Job\Strategy;
 use EBernhardson\FastCGI\Client;
 use EBernhardson\FastCGI\CommunicationException;
 
-use Resque\Worker;
-use Resque\Job;
+use Resque\Mode\Worker;
+use Resque\Model\Job;
 use Resque\Exception;
 
 /**
@@ -78,7 +78,6 @@ class Fastcgi implements StrategyInterface
     public function perform(Job $job)
     {
         $status = 'Requested fcgi job execution from ' . $this->location . ' at ' . strftime('%F %T');
-        $this->worker->updateProcLine($status);
         $this->worker->log($status);
 
         $this->waiting = true;

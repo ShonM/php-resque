@@ -2,8 +2,8 @@
 
 namespace Resque\Job\Strategy;
 
-use Resque\Worker;
-use Resque\Job;
+use Resque\Model\Worker;
+use Resque\Model\Job;
 
 /**
  * Interface that all job strategy backends should implement.

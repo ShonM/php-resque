@@ -148,4 +148,15 @@ class RedisBackend implements BackendInterface
 
         return $string;
     }
+
+    public function pop($queue)
+    {
+        $item = $this->lpop('queue:' . $queue);
+        if (!$item) {
+            return null;
+        }
+
+        return json_decode($item, true);
+    }
+
 }

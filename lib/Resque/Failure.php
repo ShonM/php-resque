@@ -33,7 +33,7 @@ class Failure
     public function getBackend()
     {
         if ($this->backend === null) {
-            $this->backend = 'Resque\\Failure\\Redis';
+            $this->backend = 'Resque\\Failure\\RedisFailure';
         }
 
         return $this->backend;

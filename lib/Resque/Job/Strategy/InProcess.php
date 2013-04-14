@@ -2,8 +2,8 @@
 
 namespace Resque\Job\Strategy;
 
-use Resque\Worker;
-use Resque\Job;
+use Resque\Model\Worker;
+use Resque\Model\Job;
 
 /**
  * Runs the job in the same process as Worker
@@ -38,8 +38,7 @@ class InProcess implements StrategyInterface
     public function perform(Job $job)
     {
         $status = 'Processing ' . $job->queue . ' since ' . strftime('%F %T');
-        $this->worker->updateProcLine($status);
-        $this->worker->log($status);
+        // $this->worker->log($status);
         $this->worker->perform($job);
     }
 
@@ -49,6 +48,6 @@ class InProcess implements StrategyInterface
      */
     public function shutdown()
     {
-        $this->worker->log('No child to kill');
+        // $this->worker->log('No child to kill');
     }
 }

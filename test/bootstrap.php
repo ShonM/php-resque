@@ -1,11 +1,4 @@
 <?php
-/**
- * Resque test bootstrap file - sets up a test environment.
- *
- * @package		Resque/Tests
- * @author		Chris Boulton <chris@bigcommerce.com>
- * @license		http://www.opensource.org/licenses/mit-license.php
- */
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
 $loader->add('Resque', __DIR__);

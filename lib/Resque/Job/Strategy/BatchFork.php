@@ -2,7 +2,7 @@
 
 namespace Resque\Job\Strategy;
 
-use Resque\Job;
+use Resque\Mode\Job;
 
 /**
  * Same as Fork, except that it processed batches of jobs before forking
@@ -36,7 +36,6 @@ class BatchFork extends Fork
     {
         if (! $this->perChild || ($this->worker->getProcessed() > 0 && $this->worker->getProcessed() % $this->perChild !== 0)) {
             $status = 'Processing ' . $job->queue . ' since ' . strftime('%F %T');
-            $this->worker->updateProcLine($status);
             $this->worker->log($status);
             $this->worker->perform($job);
         } else {

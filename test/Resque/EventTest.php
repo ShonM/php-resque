@@ -2,6 +2,8 @@
 
 namespace Resque;
 
+use Resque\Model\Worker;
+
 /**
  * Event tests.
  *
@@ -20,8 +22,8 @@ class EventTest extends TestCase
         \Test_Job::$called = false;
 
         // Register a worker to test with
-        $this->worker = new Worker($this->resque, 'jobs');
-        $this->resque->registerWorker($this->worker);
+        $this->worker = new Worker('jobs');
+        $this->resque->getWorkerManager()->register($this->worker);
     }
 
     public function tearDown()

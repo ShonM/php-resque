@@ -12,7 +12,7 @@ use Resque\Resque;
  * @license		http://www.opensource.org/licenses/mit-license.php
  */
 
-class Redis implements FailureInterface
+class RedisFailure implements FailureInterface
 {
     public function __construct($resque, $payload, $exception, $worker, $queue)
     {
