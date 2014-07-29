@@ -169,7 +169,7 @@ class Resque_Worker
 			}
 
 			// Prime this call
-			$this->getJobStrategy()
+			$this->getJobStrategy();
 
 			// Attempt to find and reserve a job
 			$job = false;
