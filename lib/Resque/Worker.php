@@ -168,6 +168,9 @@ class Resque_Worker
 				break;
 			}
 
+			// Prime this call
+			$this->getJobStrategy()
+
 			// Attempt to find and reserve a job
 			$job = false;
 			if(!$this->paused) {
