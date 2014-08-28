@@ -144,12 +144,8 @@ class Resque_Redis
 		if(in_array($name, $this->keyCommands)) {
 		    $args[0] = self::$defaultNamespace . $args[0];
 		}
-		try {
-			return $this->driver->__call($name, $args);
-		}
-		catch(CredisException $e) {
-			return false;
-		}
+
+        return $this->driver->__call($name, $args);
 	}
 
     public static function getPrefix()
