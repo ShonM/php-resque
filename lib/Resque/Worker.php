@@ -485,7 +485,7 @@ class Resque_Worker
 	{
 		$this->currentJob = null;
 		Resque_Stat::incr('processed');
-		Resque_Stat::incr('processed:' . (string)$this);
+		// Resque_Stat::incr('processed:' . (string)$this);
 		Resque::redis()->del('worker:' . (string)$this);
 	}
 
