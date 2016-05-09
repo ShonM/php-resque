@@ -24,7 +24,7 @@ class Resque
 	/**
 	 * @var int ID of Redis database to select.
 	 */
-	protected static $redisDatabase = 0;
+	protected static $redisDatabase = null;
 
 	/**
 	 * Given a host/port combination separated by a colon, set it as

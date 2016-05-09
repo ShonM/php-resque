@@ -128,7 +128,7 @@ class Resque_Redis
 		}
 
 		if ($this->database !== null) {
-			$this->driver->select($database);
+			// $this->driver->select($database);
 		}
 	}
 
