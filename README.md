@@ -11,7 +11,7 @@ I am a kiss-ass), and written in Ruby. What you're seeing here is an
 almost direct port of the Resque worker and enqueue system to PHP.
 
 For more information on Resque, visit the official GitHub project:
- <http://github.com/defunkt/resque/>
+ <https://github.com/resque/resque>
 
 For further information, see the launch post on the GitHub blog:
  <http://github.com/blog/542-introducing-resque>
@@ -223,6 +223,13 @@ the `COUNT` environment variable:
 
     $ COUNT=5 bin/resque
 
+### Custom prefix ###
+
+When you have multiple apps using the same Redis database it is better to
+use a custom prefix to separate the Resque data:
+
+	$ PREFIX=my-app-name bin/resque
+
 ### Job Strategies ###
 
 Php-resque implements multiple ways to seperate the worker process
@@ -231,7 +238,7 @@ default to the fork strategy, falling back to in-process execution.
 Specific strategies can be chosen by supplying the `JOB_STRATEGY`
 environment variable.
 
-#### Forking ####
+### Forking ###
 
 Similarly to the Ruby versions, supported platforms will immediately
 fork after picking up a job. The forked child will exit as soon as
@@ -403,3 +410,4 @@ Called after a job has been queued using the `Resque::enqueue` method. Arguments
 * Matt Heath
 * jjfrey
 * scragg0x
+* ruudk

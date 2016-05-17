@@ -27,6 +27,7 @@
 	],
 	"require": {
 		"php": ">=5.3.0",
+		"ext-pcntl": "*",
 		"colinmollenhour/credis": "~1.4"
 	},
 	"require-dev": {

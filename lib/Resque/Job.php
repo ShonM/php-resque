@@ -71,22 +71,41 @@ class Resque_Job
 		return $id;
 	}
 
-	/**
-	 * Find the next available job from the specified queue and return an
-	 * instance of Resque_Job for it.
-	 *
-	 * @param string $queue The name of the queue to check for a job in.
-	 * @return null|object Null when there aren't any waiting jobs, instance of Resque_Job when a job was found.
-	 */
-	public static function reserve($queue)
-	{
-		$payload = Resque::pop($queue);
-		if(!is_array($payload)) {
-			return false;
-		}
+    /**
+     * Find the next available job from the specified queue and return an
+     * instance of Resque_Job for it.
+     *
+     * @param string $queue The name of the queue to check for a job in.
+     * @return null|object Null when there aren't any waiting jobs, instance of Resque_Job when a job was found.
+     */
+    public static function reserve($queue)
+    {
+        $payload = Resque::pop($queue);
+        if(!is_array($payload)) {
+            return false;
+        }
 
-		return new Resque_Job($queue, $payload);
-	}
+        return new Resque_Job($queue, $payload);
+    }
+
+    /**
+     * Find the next available job from the specified queues using blocking list pop
+     * and return an instance of Resque_Job for it.
+     *
+     * @param array             $queues
+     * @param int               $timeout
+     * @return null|object Null when there aren't any waiting jobs, instance of Resque_Job when a job was found.
+     */
+    public static function reserveBlocking(array $queues, $timeout = null)
+    {
+        $item = Resque::blpop($queues, $timeout);
+
+        if(!is_array($item)) {
+            return false;
+        }
+
+        return new Resque_Job($item['queue'], $item['payload']);
+    }
 
 	/**
 	 * Update the status of the current job.
@@ -151,7 +170,7 @@ class Resque_Job
 			);
 		}
 
-		$this->instance = new $this->payload['class']();
+		$this->instance = new $this->payload['class'];
 		$this->instance->job = $this;
 		$this->instance->args = $this->getArguments();
 		$this->instance->queue = $this->queue;
@@ -226,7 +245,7 @@ class Resque_Job
 			$monitor = true;
 		}
 
-		return self::create($this->queue, $this->payload['class'], $this->payload['args'], $monitor);
+		return self::create($this->queue, $this->payload['class'], $this->getArguments(), $monitor);
 	}
 
 	/**
