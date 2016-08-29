@@ -29,6 +29,11 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
 		'SERVER_PROTOCOL' => 'HTTP/1.1'
 	);
 
+    /**
+     * @var Client
+     */
+    protected $fcgi;
+
 	/**
 	 * @param string $location	When the location contains a `:` it will be considered a host/port pair
 	 *							otherwise a unix socket path
@@ -76,11 +81,10 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
 		$this->waiting = true;
 
 		try {
-			$this->fcgi->request(array(
+			$response = $this->fcgi->request(array(
 				'RESQUE_JOB' => urlencode(serialize($job)),
 			) + $this->requestData, '');
 
-			$response = $this->fcgi->response();
 			$this->waiting = false;
 		} catch (CommunicationException $e) {
 			$this->waiting = false;
