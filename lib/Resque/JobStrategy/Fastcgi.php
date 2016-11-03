@@ -81,9 +81,10 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
 		$this->waiting = true;
 
 		try {
-			$response = $this->fcgi->request(array(
-				'RESQUE_JOB' => urlencode(serialize($job)),
-			) + $this->requestData, '');
+            $request = $this->fcgi->asyncRequest(array(
+                'RESQUE_JOB' => urlencode(serialize($job)),
+            ) + $this->requestData, '');
+            $response = $request->get(100);
 
 			$this->waiting = false;
 		} catch (CommunicationException $e) {

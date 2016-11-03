@@ -218,6 +218,7 @@ class Resque_Worker
                 $status = 'Processing ' . $job->queue . ' since ' . strftime('%F %T');
                 $this->updateProcLine($status);
                 $this->log($status, self::LOG_VERBOSE);
+				$this->log('Processing using strategy: '.get_class($this->getJobStrategy()));
                 $this->getJobStrategy()->perform($job);
                 if ($this->child === 0) {
                     exit(0);
