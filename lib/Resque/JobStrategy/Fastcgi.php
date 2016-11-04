@@ -39,8 +39,9 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
 	 *							otherwise a unix socket path
 	 * @param string $script	  Absolute path to the script that will load resque and perform the job
 	 * @param array  $environment Additional environment variables available in $_SERVER to the fcgi script
+     * @param array  $config      Extra config for the FastCGI client
 	 */
-	public function __construct($location, $script, $environment = array())
+	public function __construct($location, $script, $environment = array(), array $config = [])
 	{
 		$this->location = $location;
 
@@ -51,6 +52,14 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
 
 		$this->fcgi = new Client($location, $port);
 		$this->fcgi->setKeepAlive(true);
+
+        if (isset($config['retries'])) {
+            $this->fcgi->setRetries($config['retries']);
+        }
+
+        if (isset($config['retryDelay'])) {
+            $this->fcgi->setRetries($config['retryDelay']);
+        }
 
 		$this->requestData = $environment + $this->requestData + array(
 			'SCRIPT_FILENAME' => $script,
