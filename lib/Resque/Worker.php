@@ -375,7 +375,12 @@ class Resque_Worker
 			return;
 		}
 
-		declare(ticks = 1);
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            pcntl_async_signals();
+		} else {
+            declare(ticks = 1);
+		}
+
 		pcntl_signal(SIGTERM, array($this, 'shutDownNow'));
 		pcntl_signal(SIGINT, array($this, 'shutDownNow'));
 		pcntl_signal(SIGQUIT, array($this, 'shutdown'));
