@@ -1,4 +1,11 @@
 <?php
+
+if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
+    pcntl_async_signals(true);
+} else {
+    declare(ticks = 1);
+}
+
 /**
  * Resque worker that handles checking queues for jobs, fetching them
  * off the queues, running them and handling the result.
@@ -375,7 +382,6 @@ class Resque_Worker
 			return;
 		}
 
-		declare(ticks = 1);
 		pcntl_signal(SIGTERM, array($this, 'shutDownNow'));
 		pcntl_signal(SIGINT, array($this, 'shutDownNow'));
 		pcntl_signal(SIGQUIT, array($this, 'shutdown'));
