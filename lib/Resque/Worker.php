@@ -301,6 +301,8 @@ class Resque_Worker
             return;
         }
 
+        shuffle($queues);
+
         if($blocking === true) {
             $job = Resque_Job::reserveBlocking($queues, $timeout);
             if($job) {
