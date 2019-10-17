@@ -62,9 +62,9 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
         }
 
 		$this->requestData = $environment + $this->requestData + array(
-			'SCRIPT_FILENAME' => $script,
+			'SCRIPT_FILENAME' => realpath($script),
 			'SERVER_NAME' => php_uname('n'),
-			'RESQUE_DIR' => __DIR__.'/../../../',
+			'RESQUE_DIR' => realpath(__DIR__.'/../../../'),
 		);
 	}
 
