@@ -218,37 +218,47 @@ class Resque_Worker
             Resque_Event::trigger('beforeFork', $job);
             $this->workingOn($job);
 
-            $this->child = Resque::fork();
+            if ($this->getJobStrategy()->shouldFork()) {
+                $this->child = Resque::fork();
 
-            // Forked and we're the child. Run the job.
-            if ($this->child === 0 || $this->child === false) {
+                // Forked and we're the child. Run the job.
+                if ($this->child === 0 || $this->child === false) {
+                    $status = 'Processing ' . $job->queue . ' since ' . strftime('%F %T');
+                    $this->updateProcLine($status);
+                    $this->log($status, self::LOG_VERBOSE);
+                    $this->log('Processing using strategy: '.get_class($this->getJobStrategy()));
+                    $this->getJobStrategy()->perform($job);
+                    if ($this->child === 0) {
+                        exit(0);
+                    }
+                }
+
+                if($this->child > 0) {
+                    // Parent process, sit and wait
+                    $status = 'Forked ' . $this->child . ' at ' . strftime('%F %T');
+                    $this->updateProcLine($status);
+                    $this->log($status, self::LOG_VERBOSE);
+
+                    // Wait until the child process finishes before continuing
+                    pcntl_wait($status);
+                    $exitStatus = pcntl_wexitstatus($status);
+                    if($exitStatus !== 0) {
+                        $job->fail(new Resque_Job_DirtyExitException(
+                            'Job exited with exit code ' . $exitStatus
+                        ));
+                    }
+                }
+
+                $this->child = null;
+            } else {
                 $status = 'Processing ' . $job->queue . ' since ' . strftime('%F %T');
                 $this->updateProcLine($status);
                 $this->log($status, self::LOG_VERBOSE);
-				$this->log('Processing using strategy: '.get_class($this->getJobStrategy()));
+                $this->log('Processing using strategy: '.get_class($this->getJobStrategy()));
                 $this->getJobStrategy()->perform($job);
-                if ($this->child === 0) {
-                    exit(0);
-                }
             }
 
-            if($this->child > 0) {
-                // Parent process, sit and wait
-                $status = 'Forked ' . $this->child . ' at ' . strftime('%F %T');
-                $this->updateProcLine($status);
-                $this->log($status, self::LOG_VERBOSE);
 
-                // Wait until the child process finishes before continuing
-                pcntl_wait($status);
-                $exitStatus = pcntl_wexitstatus($status);
-                if($exitStatus !== 0) {
-                    $job->fail(new Resque_Job_DirtyExitException(
-                        'Job exited with exit code ' . $exitStatus
-                    ));
-                }
-            }
-
-            $this->child = null;
             $this->doneWorking();
         }
 

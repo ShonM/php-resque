@@ -28,4 +28,6 @@ interface Resque_JobStrategy_Interface
 	 * currently working
 	 */
 	function shutdown();
+
+	function shouldFork();
 }

@@ -124,4 +124,9 @@ class Resque_JobStrategy_Fastcgi implements Resque_JobStrategy_Interface
 		}
 		$this->fcgi->close();
 	}
+
+    public function shouldFork()
+    {
+        return false;
+    }
 }

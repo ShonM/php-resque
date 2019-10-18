@@ -45,4 +45,9 @@ class Resque_JobStrategy_InProcess implements Resque_JobStrategy_Interface
 	{
 		$this->worker->log('No child to kill.', Resque_Worker::LOG_VERBOSE);
 	}
+
+    public function shouldFork()
+    {
+        return true;
+    }
 }

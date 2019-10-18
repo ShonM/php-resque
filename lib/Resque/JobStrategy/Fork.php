@@ -85,4 +85,9 @@ class Resque_JobStrategy_Fork extends Resque_JobStrategy_InProcess
 			$this->worker->shutdown();
 		}
 	}
+
+	public function shouldFork()
+    {
+        return true;
+    }
 }

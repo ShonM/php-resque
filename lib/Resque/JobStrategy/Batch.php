@@ -55,4 +55,9 @@ class Resque_JobStrategy_Batch extends Resque_JobStrategy_Fork
 
         $this->child = null;
     }
+
+    public function shouldFork()
+    {
+        return true;
+    }
 }
